@@ -28,3 +28,4 @@ tokenizers>=0.13,<1
 torch
 soundfile
 uvicorn
+matplotlib
