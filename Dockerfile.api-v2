@@ -1,0 +1,66 @@
+# Minimal Dockerfile for GPT-SoVITS API v2 Service
+FROM python:3.11-slim
+
+LABEL maintainer="GPT-SoVITS API v2"
+LABEL version="1.0"
+LABEL description="Minimal Docker image for GPT-SoVITS API v2 service"
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    wget \
+    curl \
+    gcc \
+    g++ \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy requirements and install Python dependencies
+COPY requirements-api-v2.txt /app/
+RUN pip install --no-cache-dir -r requirements-api-v2.txt
+
+# Copy only the necessary files for API v2
+COPY api_v2.py /app/
+COPY config.py /app/
+
+# Create necessary directories first
+RUN mkdir -p /app/GPT_SoVITS /app/tools
+
+# Copy essential GPT_SoVITS modules
+COPY GPT_SoVITS/configs/ /app/GPT_SoVITS/configs/
+COPY GPT_SoVITS/TTS_infer_pack/ /app/GPT_SoVITS/TTS_infer_pack/
+COPY GPT_SoVITS/AR/ /app/GPT_SoVITS/AR/
+COPY GPT_SoVITS/BigVGAN/ /app/GPT_SoVITS/BigVGAN/
+COPY GPT_SoVITS/feature_extractor/ /app/GPT_SoVITS/feature_extractor/
+COPY GPT_SoVITS/module/ /app/GPT_SoVITS/module/
+COPY GPT_SoVITS/text/ /app/GPT_SoVITS/text/
+COPY GPT_SoVITS/process_ckpt.py /app/GPT_SoVITS/
+COPY GPT_SoVITS/sv.py /app/GPT_SoVITS/
+COPY GPT_SoVITS/utils.py /app/GPT_SoVITS/
+
+# Copy essential tools
+COPY tools/i18n/ /app/tools/i18n/
+COPY tools/audio_sr.py /app/tools/
+COPY tools/my_utils.py /app/tools/
+
+# Create __init__.py files
+RUN touch /app/GPT_SoVITS/__init__.py /app/tools/__init__.py
+
+# Create pretrained_models directory (will be mounted)
+RUN mkdir -p /app/GPT_SoVITS/pretrained_models
+
+# Set environment variables
+ENV PYTHONPATH="/app"
+ENV PYTHONUNBUFFERED=1
+
+# Expose the API port
+EXPOSE 9880
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:9880/docs || exit 1
+
+# Command to run the API
+CMD ["python", "api_v2.py", "-a", "0.0.0.0", "-p", "9880", "-c", "GPT_SoVITS/configs/tts_infer.yaml"]
