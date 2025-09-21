@@ -10,9 +10,7 @@ services:
       # Mount the SoVITS model (e8_s224)
       - /DockerConfig/gpt-sovitts/models/vits/lisa_test_e8_s224.pth:/app/GPT_SoVITS/pretrained_models/s2G488k.pth
       - /DockerConfig/gpt-sovitts/models/gpt/lisa_test-e15.ckpt:/app/GPT_SoVITS/pretrained_models/s1bert25hz-2kh-longer-epoch=68e-step=50232.ckpt
-      # Mount bert and cnhuhbert models
-      - /DockerConfig/gpt-sovitts/models/pretrained-models/chinese-roberta-wwm-ext-large:/app/GPT_SoVITS/pretrained_models/chinese-roberta-wwm-ext-large
-      - /DockerConfig/gpt-sovitts/models/pretrained-models/chinese-hubert-base:/app/GPT_SoVITS/pretrained_models/chinese-hubert-base
+      - /DockerConfig/gpt-sovitts/models/pretrained-models:/app/GPT_SoVITS/pretrained_models
       # Mount configuration file as writable
       - /DockerConfig/gpt-sovitts/models/tts_infer.yaml:/app/GPT_SoVITS/configs/tts_infer.yaml
     environment:
