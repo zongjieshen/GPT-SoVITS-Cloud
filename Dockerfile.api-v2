@@ -39,6 +39,7 @@ COPY tools/ /app/tools/
 
 # Create pretrained_models directory (will be mounted)
 RUN mkdir -p /app/GPT_SoVITS/pretrained_models
+RUN mkdir -p /app/GPT_SoVITS/uploaded_audio
 
 # Set environment variables
 ENV PYTHONPATH="/app"

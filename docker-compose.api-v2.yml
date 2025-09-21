@@ -11,6 +11,7 @@ services:
       - /DockerConfig/gpt-sovitts/models/vits/lisa_test_e8_s224.pth:/app/GPT_SoVITS/pretrained_models/s2G488k.pth
       - /DockerConfig/gpt-sovitts/models/gpt/lisa_test-e15.ckpt:/app/GPT_SoVITS/pretrained_models/s1bert25hz-2kh-longer-epoch=68e-step=50232.ckpt
       - /DockerConfig/gpt-sovitts/models/pretrained-models:/app/GPT_SoVITS/pretrained_models
+      - /DockerConfig/gpt-sovitts/uploaded_audio:/app/GPT_SoVITS/uploaded_audio
       # Mount configuration file as writable
       - /DockerConfig/gpt-sovitts/models/tts_infer.yaml:/app/GPT_SoVITS/configs/tts_infer.yaml
     environment:
