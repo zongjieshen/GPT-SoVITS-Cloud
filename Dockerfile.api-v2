@@ -41,7 +41,7 @@ COPY tools/ /app/tools/
 RUN mkdir -p /app/GPT_SoVITS/pretrained_models
 RUN mkdir -p /app/GPT_SoVITS/uploaded_audio
 
-RUN python -m nltk.downloader averaged_perceptron_tagger cmudict punkt punkt_tab
+RUN python -m nltk.downloader averaged_perceptron_tagger averaged_perceptron_tagger_eng cmudict punkt punkt_tab
 
 # Set environment variables
 ENV PYTHONPATH="/app"
