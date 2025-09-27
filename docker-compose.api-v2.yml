@@ -8,8 +8,8 @@ services:
       - "9880:9880"
     volumes:
       # Mount the SoVITS model (e8_s224)
-      - /DockerConfig/gpt-sovitts/models/vits/lisa_v3_e2_s168_l32.pth:/app/GPT_SoVITS/pretrained_models/s2G488k.pth
-      - /DockerConfig/gpt-sovitts/models/gpt/lisa_v3-e15.ckpt:/app/GPT_SoVITS/pretrained_models/s1bert25hz-2kh-longer-epoch=68e-step=50232.ckpt
+      - /DockerConfig/gpt-sovitts/models/vits/${VITS_MODEL_FILE}:/app/GPT_SoVITS/pretrained_models/s2G488k.pth
+      - /DockerConfig/gpt-sovitts/models/gpt/${GPT_MODEL_FILE}:/app/GPT_SoVITS/pretrained_models/s1bert25hz-2kh-longer-epoch=68e-step=50232.ckpt
       - /DockerConfig/gpt-sovitts/models/pretrained-models:/app/GPT_SoVITS/pretrained_models
       - /DockerConfig/gpt-sovitts/uploaded_audio:/app/GPT_SoVITS/uploaded_audio
       # Mount configuration file as writable
