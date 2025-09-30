@@ -1,7 +1,7 @@
 # Optimized Dockerfile for GPT-SoVITS API v2 with GPU support on Google Cloud Platform
-FROM nvidia/cuda:11.8-devel-ubuntu22.04
+FROM nvidia/cuda:12.4.0-devel-ubuntu22.04
 
-LABEL maintainer="GPT-SoVITS API v2 GPU" 
+LABEL maintainer="GPT-SoVITS API v2 GPU"
 LABEL version="1.0"
 LABEL description="Optimized Docker image for GPT-SoVITS API v2 service with GPU acceleration for Google Cloud Platform"
 
@@ -38,7 +38,7 @@ WORKDIR /app
 
 # Copy requirements and install Python dependencies
 COPY requirements-api-v2-gpu.txt .
-RUN pip3 install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+RUN pip3 install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
 RUN pip3 install --no-cache-dir -r requirements-api-v2-gpu.txt
 
 # Copy only necessary files for API v2
@@ -56,7 +56,7 @@ RUN mkdir -p /app/GPT_SoVITS/uploaded_audio
 # Install NLTK data
 RUN python3 -m nltk.downloader averaged_perceptron_tagger averaged_perceptron_tagger_eng cmudict punkt punkt_tab
 
-# Expose the API port
+# Expose the API port (required for Cloud Run)
 EXPOSE 8080
 
 # Health check for container orchestration
