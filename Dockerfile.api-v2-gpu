@@ -1,4 +1,9 @@
+# Optimized Dockerfile for GPT-SoVITS API v2 with GPU support on Google Cloud Platform
 FROM nvidia/cuda:11.8-devel-ubuntu22.04
+
+LABEL maintainer="GPT-SoVITS API v2 GPU" 
+LABEL version="1.0"
+LABEL description="Optimized Docker image for GPT-SoVITS API v2 service with GPU acceleration for Google Cloud Platform"
 
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive
@@ -6,6 +11,7 @@ ENV PYTHONUNBUFFERED=1
 ENV CUDA_HOME=/usr/local/cuda
 ENV PATH=${CUDA_HOME}/bin:${PATH}
 ENV LD_LIBRARY_PATH=${CUDA_HOME}/lib64:${LD_LIBRARY_PATH}
+ENV PYTHONPATH="/app"
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -15,8 +21,16 @@ RUN apt-get update && apt-get install -y \
     git \
     wget \
     curl \
+    gcc \
+    g++ \
+    make \
+    cmake \
+    swig \
     ffmpeg \
     libsndfile1 \
+    mecab \
+    libmecab-dev \
+    mecab-ipadic-utf8 \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
@@ -27,11 +41,27 @@ COPY requirements-api-v2-gpu.txt .
 RUN pip3 install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 RUN pip3 install --no-cache-dir -r requirements-api-v2-gpu.txt
 
-# Copy application code
-COPY . .
+# Copy only necessary files for API v2
+COPY api_v2.py /app/
+COPY config.py /app/
 
-# Expose API port
-EXPOSE 9880
+# Copy required folders
+COPY GPT_SoVITS/ /app/GPT_SoVITS/
+COPY tools/ /app/tools/
 
-# Run the API server
-CMD ["python3", "api_v2.py"]
+# Create directories (will be mounted in production)
+RUN mkdir -p /app/GPT_SoVITS/pretrained_models
+RUN mkdir -p /app/GPT_SoVITS/uploaded_audio
+
+# Install NLTK data
+RUN python3 -m nltk.downloader averaged_perceptron_tagger averaged_perceptron_tagger_eng cmudict punkt punkt_tab
+
+# Expose the API port
+EXPOSE 8080
+
+# Health check for container orchestration
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:8080/docs || exit 1
+
+# Command to run the API with explicit parameters
+CMD ["python3", "api_v2.py", "-a", "0.0.0.0", "-p", "8080", "-c", "GPT_SoVITS/configs/tts_infer.yaml"]
