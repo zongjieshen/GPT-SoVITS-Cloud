@@ -1,36 +1,71 @@
+# Build flags
+--no-binary=opencc
+
 # Core ML/AI libraries
-numpy>=1.21.0
-matplotlib
-scipy>=1.7.0
-librosa>=0.9.0
+numpy<2.0  # Matched version constraint from standard
+scipy
+librosa==0.10.2  # Matched exact version from standard
 soundfile>=0.10.0
-pyworld>=0.3.0
-praat-parselmouth>=0.4.0
+pyworld>=0.3.0  # GPU-specific addition
+praat-parselmouth>=0.4.0  # GPU-specific addition
+tensorboard  # Added from standard
+pytorch-lightning>=2.4  # Added from standard
 
 # Audio processing
 ffmpeg-python>=0.2.0
-resampy>=0.3.0
+resampy>=0.3.0  # GPU-specific addition
 
 # Deep learning (PyTorch installed separately with CUDA)
-transformers>=4.21.0
-accelerate>=0.20.0
+transformers>=4.43,<=4.50  # Matched version constraints from standard
+accelerate>=0.20.0  # GPU-specific addition
+peft  # Added from standard
+x_transformers  # Added from standard
+
+torchaudio  # Added from standard
+modelscope==1.10.0  # Added from standard
+sentencepiece  # Added from standard
 
 # API and web framework
-fastapi>=0.68.0
-uvicorn[standard]>=0.15.0
-pydantic>=1.8.0
+fastapi[standard]>=0.115.2  # Matched version and variant from standard
+uvicorn[standard]>=0.15.0  # Kept GPU-specific variant
+pydantic<=2.10.6  # Matched version constraint from standard
 
 # Text processing
 jieba>=0.42.1
+jieba_fast  # Added from standard
 pypinyin>=0.44.0
-langdetect>=1.0.9
+fast_langdetect>=0.3.1  # Matched from standard (replaces langdetect)
+g2p_en  # Added from standard
+pyopenjtalk>=0.4.1  # Added from standard
+split-lang  # Added from standard
+wordsegment  # Added from standard
+rotary_embedding_torch  # Added from standard
+ToJyutping  # Added from standard
+g2pk2  # Added from standard
+ko_pron  # Added from standard
+nltk>=3.6.0  # Added previously
 
 # Utilities
 tqdm>=4.62.0
 matplotlib>=3.5.0
-Pillow>=8.3.0
-requests>=2.26.0
-loguru>=0.6.0
+Pillow>=8.3.0  # GPU-specific addition
+requests>=2.26.0  # GPU-specific addition
+loguru>=0.6.0  # GPU-specific addition
+chardet  # Added from standard
+PyYAML  # Added from standard
+psutil  # Added from standard
+cn2an  # Added from standard
+
+# Platform-specific dependencies
+opencc
+python_mecab_ko; sys_platform != 'win32'  # Added from standard
+
+# Model and inference optimizations
+torchmetrics<=1.5  # Added from standard
+ctranslate2>=4.0,<5  # Added from standard
+huggingface_hub>=0.13  # Added from standard
+tokenizers>=0.13,<1  # Added from standard
+av>=11  # Added from standard
 
 # Optional: for better performance
-numba>=0.56.0
+numba>=0.56.0  # Moved to end as optional
