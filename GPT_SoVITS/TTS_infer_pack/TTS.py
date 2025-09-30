@@ -272,20 +272,10 @@ class TTS_Config:
         },
     }
     configs: dict = None
-    v1_languages: list = ["auto", "en", "zh", "ja", "all_zh", "all_ja"]
-    v2_languages: list = ["auto", "auto_yue", "en", "zh", "ja", "yue", "ko", "all_zh", "all_ja", "all_yue", "all_ko"]
+    v1_languages: list = ["en"]  # Only English
+    v2_languages: list = ["en"]  # Only English
     languages: list = v2_languages
-    # "all_zh",#全部按中文识别
     # "en",#全部按英文识别#######不变
-    # "all_ja",#全部按日文识别
-    # "all_yue",#全部按中文识别
-    # "all_ko",#全部按韩文识别
-    # "zh",#按中英混合识别####不变
-    # "ja",#按日英混合识别####不变
-    # "yue",#按粤英混合识别####不变
-    # "ko",#按韩英混合识别####不变
-    # "auto",#多语种启动切分识别语种
-    # "auto_yue",#多语种启动切分识别语种
 
     def __init__(self, configs: Union[dict, str] = None):
         # 设置默认配置文件路径
